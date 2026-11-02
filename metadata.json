@@ -1,0 +1,8 @@
+{
+  "name": " Trig Drop！ ",
+  "description": "落下してくる三角関数（sin, cos, tan）の値を制限時間内に素早く答えて迎撃する体力制数学アクションゲーム。単位円アシスト・弱点分析付き。",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

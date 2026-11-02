@@ -1,11 +1,33 @@
-<div align="center">
+# Trig Drop！ (高校数学 三角比・三角関数 即答防衛ゲーム)
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+落下してくる三角比・三角関数（sin, cos, tan）や方程式、度数法・弧度法変換の値を制限時間内に素早く答えて迎撃する体力制数学アクションゲーム。
 
-  <h1>Built with AI Studio</h2>
+## 技術スタック
+- **Frontend**: React 19 + TypeScript
+- **Bundler**: Vite 8
+- **Styling**: Tailwind CSS v4
+- **Icons**: Lucide React
+- **Audio**: Web Audio API (ブラウザ標準)
 
-  <p>The fastest path from prompt to production with Gemini.</p>
+## デプロイ設定 (Vercel)
+Vercel に GitHub リポジトリをインポートするだけで自動検出されます：
+- **Framework Preset**: `Vite`
+- **Build Command**: `npm run build`
+- **Output Directory**: `dist`
+- **Install Command**: `npm install`
+- **SPA Rewrites**: `vercel.json` に設定済み
 
-  <a href="https://aistudio.google.com/apps">Start building</a>
+## ローカル開発
+```bash
+# 依存関係のインストール
+npm install
 
-</div>
+# 開発サーバー起動 (port: 3000)
+npm run dev
+
+# 型チェック
+npm run lint
+
+# プロダクションビルド
+npm run build
+```

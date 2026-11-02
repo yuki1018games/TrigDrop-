@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+html,
+body,
+#root {
+  height: 100dvh;
+  max-height: 100dvh;
+  width: 100vw;
+  max-width: 100vw;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  overscroll-behavior: none;
+  touch-action: manipulation;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  font-feature-settings: "zero" 0;
+}
+
+/* 
+ * Switch font-mono to 'Outfit' with unslashed zero enabled
+ * This completely prevents digit 0 from having a slash, distinguishing it cleanly from theta (θ).
+ */
+.font-mono {
+  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif !important;
+  font-feature-settings: "zero" 0 !important;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Distinctive serif styling for theta (θ) to make it 100% distinguishable from 0 */
+.math-theta {
+  font-family: 'Lora', Georgia, 'Times New Roman', serif !important;
+  font-style: italic !important;
+  font-weight: 500 !important;
+  color: #fcd34d !important; /* amber-300 */
+  padding: 0 1px;
+}
