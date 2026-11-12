@@ -545,24 +545,13 @@ export function getDegreeTrigProblems(difficulty: GameDifficulty, includeTanOver
 
 // Generate inverse trig degree problems (e.g. sin θ = 1/2 -> answers θ in degrees like 30°, 150°)
 export function getInverseDegreeProblems(difficulty: GameDifficulty, includeTanOverride?: boolean): TrigProblem[] {
-  let angles: AngleInfo[] = [];
-  let allowedFuncs: ('inv_sin' | 'inv_cos' | 'inv_tan')[] = ['inv_sin', 'inv_cos'];
-  let domain = '0° ≦ θ < 360°';
+  // Standard domain for trigonometric equations is full circle 0° ≦ θ < 360° so that equations have 2 solutions
+  const domain = '0° ≦ θ < 360°';
+  const allAngles = ANGLE_DATABASE.filter(a => a.degree < 360);
 
-  if (difficulty === 'beginner') {
-    domain = '0° ≦ θ ≦ 90°';
-    angles = ANGLE_DATABASE.filter(a => a.degree <= 90);
-    allowedFuncs = ['inv_sin', 'inv_cos'];
-  } else if (difficulty === 'standard') {
-    domain = '0° ≦ θ ≦ 180°';
-    angles = ANGLE_DATABASE.filter(a => a.degree <= 180);
-    allowedFuncs = includeTanOverride ? ['inv_sin', 'inv_cos', 'inv_tan'] : ['inv_sin', 'inv_cos'];
-  } else {
-    domain = '0° ≦ θ < 360°';
-    angles = ANGLE_DATABASE.filter(a => a.degree < 360);
-    allowedFuncs = includeTanOverride || difficulty === 'advanced' || difficulty === 'supreme'
-      ? ['inv_sin', 'inv_cos', 'inv_tan']
-      : ['inv_sin', 'inv_cos'];
+  let allowedFuncs: ('inv_sin' | 'inv_cos' | 'inv_tan')[] = ['inv_sin', 'inv_cos'];
+  if (includeTanOverride || difficulty === 'advanced' || difficulty === 'supreme') {
+    allowedFuncs = ['inv_sin', 'inv_cos', 'inv_tan'];
   }
 
   const problems: TrigProblem[] = [];
@@ -574,7 +563,7 @@ export function getInverseDegreeProblems(difficulty: GameDifficulty, includeTanO
     const displayProp = isSin ? 'sinDisplay' : isCos ? 'cosDisplay' : 'tanDisplay';
 
     // Collect all valid angles (filter out undefined for tan like 90° and 270°)
-    const validAngles = angles.filter(a => {
+    const validAngles = allAngles.filter(a => {
       if (!isSin && !isCos && (a.degree === 90 || a.degree === 270)) return false;
       return true;
     });
@@ -583,19 +572,23 @@ export function getInverseDegreeProblems(difficulty: GameDifficulty, includeTanO
     const uniqueValues = Array.from(new Set(validAngles.map(a => a[displayProp])));
 
     for (const givenVal of uniqueValues) {
+      // In beginner difficulty, prioritize positive/non-negative target values for easier visual intuition
+      if (difficulty === 'beginner' && givenVal.startsWith('-')) {
+        continue;
+      }
+
       const matched = validAngles.filter(a => a[displayProp] === givenVal);
-      if (matched.length === 0) continue;
+      // Strictly enforce that all equation problems in this mode MUST have exactly 2 solutions!
+      // (Excludes single-point extrema like sin θ = ±1 or cos θ = ±1 which only have 1 solution in [0, 360))
+      if (matched.length !== 2) continue;
 
       matched.sort((a, b) => a.degree - b.degree);
 
       const correctValueKeys = matched.map(a => `deg_${a.degree}`);
       const correctDisplays = matched.map(a => `${a.degree}°`);
       const correctDisplay = correctDisplays.join(', ');
-      const answersCount = matched.length;
 
-      const explanation = answersCount > 1
-        ? `${funcLabel} θ = ${givenVal} を満たす角は、条件 ${domain} において θ = ${correctDisplay} の2つです。両方答えて迎撃！`
-        : `${funcLabel} θ = ${givenVal} を満たす角は、条件 ${domain} において θ = ${correctDisplay} です。`;
+      const explanation = `${funcLabel} θ = ${givenVal} を満たす角は、条件 ${domain} において θ = ${correctDisplay} の2つです。両方答えて迎撃！`;
 
       problems.push({
         id: `inv_${f}_val_${givenVal.replace(/[/√-]/g, '_')}`,
@@ -609,7 +602,7 @@ export function getInverseDegreeProblems(difficulty: GameDifficulty, includeTanO
         correctDisplay,
         correctValueKeys,
         correctDisplays,
-        expectedAnswersCount: answersCount,
+        expectedAnswersCount: 2,
         quadrant: matched[0].quadrant,
         domainHint: domain,
         explanation,
@@ -623,24 +616,13 @@ export function getInverseDegreeProblems(difficulty: GameDifficulty, includeTanO
 
 // Generate inverse trig radian problems (e.g. sin θ = 1/2 -> answer θ in radians like π/6, 5π/6)
 export function getInverseRadianProblems(difficulty: GameDifficulty, includeTanOverride?: boolean): TrigProblem[] {
-  let angles: AngleInfo[] = [];
-  let allowedFuncs: ('inv_rad_sin' | 'inv_rad_cos' | 'inv_rad_tan')[] = ['inv_rad_sin', 'inv_rad_cos'];
-  let domain = '0 ≦ θ < 2π';
+  // Standard domain for trigonometric equations is full circle 0 ≦ θ < 2π so that equations have 2 solutions
+  const domain = '0 ≦ θ < 2π';
+  const allAngles = ANGLE_DATABASE.filter(a => a.degree < 360);
 
-  if (difficulty === 'beginner') {
-    domain = '0 ≦ θ ≦ π/2';
-    angles = ANGLE_DATABASE.filter(a => a.degree <= 90);
-    allowedFuncs = ['inv_rad_sin', 'inv_rad_cos'];
-  } else if (difficulty === 'standard') {
-    domain = '0 ≦ θ ≦ π';
-    angles = ANGLE_DATABASE.filter(a => a.degree <= 180);
-    allowedFuncs = includeTanOverride ? ['inv_rad_sin', 'inv_rad_cos', 'inv_rad_tan'] : ['inv_rad_sin', 'inv_rad_cos'];
-  } else {
-    domain = '0 ≦ θ < 2π';
-    angles = ANGLE_DATABASE.filter(a => a.degree < 360);
-    allowedFuncs = includeTanOverride || difficulty === 'advanced' || difficulty === 'supreme'
-      ? ['inv_rad_sin', 'inv_rad_cos', 'inv_rad_tan']
-      : ['inv_rad_sin', 'inv_rad_cos'];
+  let allowedFuncs: ('inv_rad_sin' | 'inv_rad_cos' | 'inv_rad_tan')[] = ['inv_rad_sin', 'inv_rad_cos'];
+  if (includeTanOverride || difficulty === 'advanced' || difficulty === 'supreme') {
+    allowedFuncs = ['inv_rad_sin', 'inv_rad_cos', 'inv_rad_tan'];
   }
 
   const problems: TrigProblem[] = [];
@@ -651,7 +633,7 @@ export function getInverseRadianProblems(difficulty: GameDifficulty, includeTanO
     const funcLabel = isSin ? 'sin' : isCos ? 'cos' : 'tan';
     const displayProp = isSin ? 'sinDisplay' : isCos ? 'cosDisplay' : 'tanDisplay';
 
-    const validAngles = angles.filter(a => {
+    const validAngles = allAngles.filter(a => {
       if (!isSin && !isCos && (a.degree === 90 || a.degree === 270)) return false;
       return true;
     });
@@ -659,19 +641,22 @@ export function getInverseRadianProblems(difficulty: GameDifficulty, includeTanO
     const uniqueValues = Array.from(new Set(validAngles.map(a => a[displayProp])));
 
     for (const givenVal of uniqueValues) {
+      // In beginner difficulty, prioritize positive/non-negative target values for easier visual intuition
+      if (difficulty === 'beginner' && givenVal.startsWith('-')) {
+        continue;
+      }
+
       const matched = validAngles.filter(a => a[displayProp] === givenVal);
-      if (matched.length === 0) continue;
+      // Strictly enforce that all equation problems in this mode MUST have exactly 2 solutions!
+      if (matched.length !== 2) continue;
 
       matched.sort((a, b) => a.degree - b.degree);
 
       const correctValueKeys = matched.map(a => `rad_${a.radStr}`);
       const correctDisplays = matched.map(a => a.radStr);
       const correctDisplay = correctDisplays.join(', ');
-      const answersCount = matched.length;
 
-      const explanation = answersCount > 1
-        ? `${funcLabel} θ = ${givenVal} を満たす角は、条件 ${domain} において θ = ${correctDisplay} の2つです。両方答えて迎撃！`
-        : `${funcLabel} θ = ${givenVal} を満たす角は、条件 ${domain} において θ = ${correctDisplay} です。`;
+      const explanation = `${funcLabel} θ = ${givenVal} を満たす角は、条件 ${domain} において θ = ${correctDisplay} の2つです。両方答えて迎撃！`;
 
       problems.push({
         id: `invrad_${f}_val_${givenVal.replace(/[/√-]/g, '_')}`,
@@ -685,7 +670,7 @@ export function getInverseRadianProblems(difficulty: GameDifficulty, includeTanO
         correctDisplay,
         correctValueKeys,
         correctDisplays,
-        expectedAnswersCount: answersCount,
+        expectedAnswersCount: 2,
         quadrant: matched[0].quadrant,
         domainHint: domain,
         explanation,

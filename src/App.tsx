@@ -469,11 +469,11 @@ export default function App() {
                   <div className="flex items-center justify-between mb-1">
                     <span className="font-bold text-xs sm:text-sm text-amber-300">① 方程式 (度数法回答)</span>
                     <span className="text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 px-1.5 py-0.2 rounded">
-                      度数法回答
+                      解が2つ (度数法)
                     </span>
                   </div>
                   <p className="text-[11px] text-slate-400 leading-snug">
-                    <span className="text-white font-mono">cos θ = -1/2</span> から <span className="text-white font-mono">θ = 120°</span> など、方程式の解を度数法で迎撃！
+                    <span className="text-white font-mono">cos θ = -1/2</span> から <span className="text-white font-mono">θ = 120°, 240°</span> など、方程式の2つの解を度数法で両方答えて迎撃！
                   </p>
                 </button>
 
@@ -532,11 +532,11 @@ export default function App() {
                   <div className="flex items-center justify-between mb-1">
                     <span className="font-bold text-xs sm:text-sm text-violet-300">④ 方程式 (弧度法回答) [新]</span>
                     <span className="text-[10px] font-mono font-bold bg-violet-500/20 text-violet-300 px-1.5 py-0.2 rounded">
-                      弧度法回答
+                      解が2つ (弧度法)
                     </span>
                   </div>
                   <p className="text-[11px] text-slate-400 leading-snug">
-                    <span className="text-white font-mono">sin θ = 1/2</span> から <span className="text-white font-mono">θ = π/6</span> など、方程式の解を弧度法キーで迎撃！
+                    <span className="text-white font-mono">sin θ = 1/2</span> から <span className="text-white font-mono">θ = π/6, 5π/6</span> など、方程式の2つの解を両方入力して迎撃！
                   </p>
                 </button>
 

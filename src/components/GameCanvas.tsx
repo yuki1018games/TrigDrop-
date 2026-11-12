@@ -300,8 +300,13 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({
       target.answeredKeys = nextAnswered;
 
       // Check if all required answers have been given
-      if (nextAnswered.length < expectedKeys.length) {
-        // PARTIAL HIT (1 of 2 answered!)
+      const requiredAnswersCount = Math.max(
+        target.problem.expectedAnswersCount || 1,
+        expectedKeys.length
+      );
+
+      if (nextAnswered.length < requiredAnswersCount) {
+        // PARTIAL HIT (e.g. 1 of 2 answered!)
         sounds.playLaser();
         lasersRef.current.push({
           id: Math.random().toString(),
